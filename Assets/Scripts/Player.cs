@@ -29,10 +29,6 @@ public class Player : MonoBehaviour
     {
         rg = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
-        anim.SetBool("IdleRight", true);
-        anim.SetBool("IdleLeft", false);
-        anim.SetBool("WalkRight", false);
-        anim.SetBool("WalkLeft", false);
         secretCode = new string[] { "r", "a", "p", "h", "a" };
         index = 0;
     }
@@ -43,29 +39,6 @@ public class Player : MonoBehaviour
         if(!dead && isGrounded && (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W) || CrossPlatformInputManager.GetButtonDown("Jump"))){
             Debug.Log("Up");
             rg.AddForce(new Vector2(0f, 10000f));
-        }
-        Vector2 vector = new Vector2(CrossPlatformInputManager.GetAxis("Horizontal") * maxSpeed * Time.deltaTime, CrossPlatformInputManager.GetAxis("Vertical") * maxSpeed * Time.deltaTime);
-        if (vector.x > 0f)
-        {
-            if (GetComponent<SpriteRenderer>().flipX)
-            {
-                GetComponent<SpriteRenderer>().flipX = false;
-                anim.SetBool("WalkRight", true);
-                anim.SetBool("WalkLeft", false);
-            }
-        }
-        else if (vector.x < 0f && !GetComponent<SpriteRenderer>().flipX)
-        {
-            GetComponent<SpriteRenderer>().flipX = true;
-            anim.SetBool("WalkRight", false);
-            anim.SetBool("WalkLeft", true);
-        }
-        if (vector.x == 0f)
-        {
-            anim.SetBool("IdleRight", true);
-            anim.SetBool("IdleLeft", false);
-            anim.SetBool("WalkRight", false);
-            anim.SetBool("WalkLeft", false);
         }
         if (Input.anyKeyDown)
         {
@@ -78,10 +51,50 @@ public class Player : MonoBehaviour
                 index = 0;
             }
         }
+        //float axis = Input.GetAxis("Horizontal");
+        float axis = CrossPlatformInputManager.GetAxis("Horizontal");
+        rg.linearVelocity = new Vector2(axis * maxSpeed, rg.linearVelocity.y);
+        if (axis > 0f)
+        {
+            if (GetComponent<SpriteRenderer>().flipX)
+            {
+                GetComponent<SpriteRenderer>().flipX = false;
+            }
+        }
+        else if (axis < 0f && !GetComponent<SpriteRenderer>().flipX)
+        {
+            GetComponent<SpriteRenderer>().flipX = true;
+        }
+	if (Mathf.Abs(CrossPlatformInputManager.GetAxis("Horizontal")) > 0.1){
+            anim.SetBool("IdleRight", true);
+            anim.SetBool("IdleLeft", false);
+            anim.SetBool("WalkRight", false);
+            anim.SetBool("WalkLeft", false);
+    	}
+	else
+	{
+	    anim.SetBool("IdleRight", false);
+            anim.SetBool("IdleLeft", false);
+            anim.SetBool("WalkRight", true);
+            anim.SetBool("WalkLeft", false);
+	}
+	if (Mathf.Abs(CrossPlatformInputManager.GetAxis("Horizontal")) < 0.1){
+            anim.SetBool("IdleRight", false);
+            anim.SetBool("IdleLeft", true);
+            anim.SetBool("WalkRight", false);
+            anim.SetBool("WalkLeft", false);
+    	}
+	else
+	{
+	    anim.SetBool("IdleRight", false);
+            anim.SetBool("IdleLeft", false);
+            anim.SetBool("WalkRight", false);
+            anim.SetBool("WalkLeft", true);
+	}
 
         if (index == secretCode.Length)
         {
-            NGHelper.instance.unlockMedal(84478);
+            //NGHelper.instance.unlockMedal(84478);
             anim.enabled = true;
             index = 0;
         }
@@ -99,29 +112,19 @@ public class Player : MonoBehaviour
             return;
         }
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundRadius, whatIsGround);
-        float axis = Input.GetAxis("Horizontal");
+        //float axis = Input.GetAxis("Horizontal");
+        float axis = CrossPlatformInputManager.GetAxis("Horizontal");
         rg.linearVelocity = new Vector2(axis * maxSpeed, rg.linearVelocity.y);
         if (axis > 0f)
         {
             if (GetComponent<SpriteRenderer>().flipX)
             {
                 GetComponent<SpriteRenderer>().flipX = false;
-                anim.SetBool("WalkRight", true);
-                anim.SetBool("WalkLeft", false);
-                if (axis == 0f)
-                {
-                    anim.SetBool("IdleRight", true);
-                    anim.SetBool("IdleLeft", false);
-                    anim.SetBool("WalkRight", false);
-                    anim.SetBool("WalkLeft", false);
-                }
             }
         }
         else if (axis < 0f && !GetComponent<SpriteRenderer>().flipX)
         {
             GetComponent<SpriteRenderer>().flipX = true;
-            anim.SetBool("WalkRight", false);
-            anim.SetBool("WalkLeft", true);
         }
     }
 
