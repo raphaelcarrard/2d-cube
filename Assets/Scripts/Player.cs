@@ -51,8 +51,8 @@ public class Player : MonoBehaviour
                 index = 0;
             }
         }
-        //float axis = Input.GetAxis("Horizontal");
-        float axis = CrossPlatformInputManager.GetAxis("Horizontal");
+        float axis = Input.GetAxis("Horizontal"); //controls for Windows and Web
+        //float axis = CrossPlatformInputManager.GetAxis("Horizontal"); //controls for Android
         rg.linearVelocity = new Vector2(axis * maxSpeed, rg.linearVelocity.y);
         if (axis > 0f)
         {
@@ -112,8 +112,8 @@ public class Player : MonoBehaviour
             return;
         }
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundRadius, whatIsGround);
-        //float axis = Input.GetAxis("Horizontal");
-        float axis = CrossPlatformInputManager.GetAxis("Horizontal");
+        float axis = Input.GetAxis("Horizontal"); //controls for Windows and Web
+        //float axis = CrossPlatformInputManager.GetAxis("Horizontal"); //controls for Android
         rg.linearVelocity = new Vector2(axis * maxSpeed, rg.linearVelocity.y);
         if (axis > 0f)
         {
