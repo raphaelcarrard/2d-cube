@@ -94,7 +94,7 @@ public class Player : MonoBehaviour
 
         if (index == secretCode.Length)
         {
-            //NGHelper.instance.unlockMedal(84478);
+            NGHelper.instance.unlockMedal(84478);
             anim.enabled = true;
             index = 0;
         }
